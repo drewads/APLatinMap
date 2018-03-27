@@ -1,15 +1,23 @@
-canvas
+#buttons
 {
-	position: absolute;
-	margin:auto;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: none;
+	display: flex;
+    justify-content: space-between;
 }
 
-img
+#wrapper
 {
-	display: none;
+	width: 100%;
+	text-align: center;
+}
+
+canvas
+{
+	display: inline;
+    border: none;
+    background-image: url(MedMap.jpg);
+}
+
+#description
+{
+	text-align: center;
 }
