@@ -1,10 +1,10 @@
 #buttons
 {
 	display: flex;
-    justify-content: space-between;
+	justify-content: space-between;
 }
 
-#wrapper
+.wrapper
 {
 	width: 100%;
 	text-align: center;
@@ -13,8 +13,8 @@
 canvas
 {
 	display: inline;
-    border: none;
-    background-image: url(MedMap.jpg);
+	border: none;
+	background-image: url(MedMap.jpg);
 }
 
 #description
