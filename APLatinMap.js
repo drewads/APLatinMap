@@ -1,34 +1,12 @@
 let canvas = document.getElementById("canvas");
 let next = document.getElementById("nextButton");
 let previous = document.getElementById("previousButton");
+let aeneid = document.getElementById("aeneidButton");
+let ctx = canvas.getContext("2d");
+let aeneidMap = null;
+let currentLoc = null;
 
-previous.onclick = function(){
-	if (currentLoc == 0 || currentLoc == null)
-	{
-		return;
-	}
-
-	ctx.fillStyle = "#7344f4";
-	star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
-	currentLoc -= 1;
-	ctx.fillStyle = "black";
-	star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
-	displayDescription(currentLoc);
-}
-
-next.onclick = function(){
-	if (currentLoc == aeLoc.length - 1 || currentLoc == null)
-	{
-		return;
-	}
-
-	ctx.fillStyle = "#7344f4";
-	star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
-	currentLoc += 1;
-	ctx.fillStyle = "black";
-	star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
-	displayDescription(currentLoc);
-}
+canvas.addEventListener("mousedown", mouseClick, false);
 
 aeLoc = [
 	[579, 284],
@@ -61,49 +39,58 @@ aeDes = [
 	"Point 12",
 	"Point 13"];
 
-let currentLoc = null;
+initialPrintMap();
 
-let ctx=canvas.getContext("2d");
+aeneid.onclick = function(){
+	aeneidMap = true;
 
-/*	This function draws a solid star in canvas, and was adapted from:
-*	https://programmingthomas.wordpress.com/2012/05/16/drawing-stars-with-html5-canvas/
-*/
-function star(ctx, x, y)
-{
-	radius = 8;
-	points = 5;
-	insetFraction = .5;
-	ctx.save();
 	ctx.beginPath();
-	ctx.translate(x, y);
-	ctx.moveTo(0,0-radius);
-	for (var i = 0; i < points; i++)
-	{
-		ctx.rotate(Math.PI / points);
-		ctx.lineTo(0, 0 - (radius*insetFraction));
-		ctx.rotate(Math.PI / points);
-		ctx.lineTo(0, 0 - radius);
+	ctx.moveTo(aeLoc[0][0], aeLoc[0][1]);
+
+	for (var i = 1; i < aeLoc.length; i++) {
+			ctx.lineTo(aeLoc[i][0], aeLoc[i][1]);
 	}
-	ctx.closePath()
-	ctx.fill();
-	ctx.restore();
+	ctx.stroke();
+
+	ctx.fillStyle = "#7344f4";
+
+	for (var i = 0; i < aeLoc.length; i++) {
+		star(ctx, aeLoc[i][0], aeLoc[i][1]);
+	}
 }
 
-ctx.fillStyle = "#7344f4";
-
-ctx.beginPath();
-ctx.moveTo(aeLoc[0][0], aeLoc[0][1]);
-
-for (var i = 1; i < aeLoc.length; i++) {
-		ctx.lineTo(aeLoc[i][0], aeLoc[i][1]);
+previous.onclick = function(){
+	if (currentLoc == 0 || currentLoc == null)
+	{
+		return;
+	}
+	if (aeneidMap)
+	{
+		ctx.fillStyle = "#7344f4";
+		star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
+		currentLoc -= 1;
+		ctx.fillStyle = "black";
+		star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
+		displayDescription(currentLoc);
+	}
 }
-ctx.stroke();
 
-for (var i = 0; i < aeLoc.length; i++) {
-	star(ctx, aeLoc[i][0], aeLoc[i][1]);
+next.onclick = function(){
+	if (currentLoc == aeLoc.length - 1 || currentLoc == null)
+	{
+		return;
+	}
+
+	if (aeneidMap)
+	{
+		ctx.fillStyle = "#7344f4";
+		star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
+		currentLoc += 1;
+		ctx.fillStyle = "black";
+		star(ctx, aeLoc[currentLoc][0], aeLoc[currentLoc][1])
+		displayDescription(currentLoc);
+	}
 }
-
-canvas.addEventListener("mousedown", mouseClick, false);
 
 function mouseClick(event)
 {
@@ -128,6 +115,44 @@ function mouseClick(event)
 	//alert("x:" + x + " y:" + y);
 }
 
+/*	This function draws a solid star in canvas and was adapted from:
+*	https://programmingthomas.wordpress.com/2012/05/16/drawing-stars-with-html5-canvas/
+*/
+function star(ctx, x, y)
+{
+	radius = 8;
+	points = 5;
+	insetFraction = .5;
+	ctx.save();
+	ctx.beginPath();
+	ctx.translate(x, y);
+	ctx.moveTo(0,0-radius);
+	for (var i = 0; i < points; i++)
+	{
+		ctx.rotate(Math.PI / points);
+		ctx.lineTo(0, 0 - (radius*insetFraction));
+		ctx.rotate(Math.PI / points);
+		ctx.lineTo(0, 0 - radius);
+	}
+	ctx.closePath()
+	ctx.fill();
+	ctx.restore();
+}
+
+//Prints initial stars on map
+function initialPrintMap()
+{
+	ctx.fillStyle = "#7344f4";	//Purple
+
+	//Aeneid star map markers
+	for (var i = 0; i < aeLoc.length; i++) {
+		star(ctx, aeLoc[i][0], aeLoc[i][1]);
+	}
+}
+
+/*	Sets description element below canvas to tell about the
+*	currently selected location.
+*/
 function displayDescription(location)
 {
 	let description = document.getElementById("description");
